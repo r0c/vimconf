@@ -14,7 +14,7 @@ endif
 colorscheme ron        " elflord ron peachpuff default 设置配色方案，vim自带的配色方案保存在/usr/share/vim/vim72/colors目录下
 
 " load plugins managed by pathogen
-filetype off
+
 "call pathogen#runtime_append_all_bundles()
 execute pathogen#infect()
 " call pathogen#helptags()
@@ -32,8 +32,75 @@ map <c-k> <c-w>k
 map <c-l> <c-w>l
 map <c-h> <c-w>h
 
+"Task lists,TODO
+map <leader>td <Plug>TaskList
+
+"Revision History
+map <leader>g :GundoToggle<CR>
+
+"Pep8
+let g:pep8_map='<leader>8'
+
+"SuperTab
+"hit <leader>pw when our cursor is on a module and have a new window open with
+"the whole documentation page for it.
+au FileType python set omnifunc=pythoncomplete#Complete
+let g:SuperTabDefaultCompletionType = "context"
+set completeopt=menuone,longest,preview
+
+"minibufexpl
+" Open files with :e <filename> to place in a buffer
+" You can also get a list of them doing :buffers.
+" ou can switch between the buffers using b<number>, such as :b1 for the first
+" buffer. You can also use its name to match, so you can type :b mod<tab> to
+" autocomplete opening the models.py buffer. 
+
+"command-t
+"command-t is bound to <leader>t. This will use fuzzy text matching to find
+"any file in your project.It also supports searching only through opened
+"buffers, instead of files using <leader>b.
+
+"NerdTree
+map <leader>n :NERDTreeToggle<CR>
+
+"Ropevim
+"Ropevim is also a great tool that will allow you to navigate around your
+"code. It supports automatically inserting import statements, goto definition,
+"refactoring, and code completion.
+map <leader>j :RopeGotoDefinition<CR>
+map <leader>r :RopeRename<CR>
+
+"ACK
+"Ack is similar to grep, but much better in my opinion. You can fuzzy text
+"search for anything in your code (variable name, class, method, etc) and
+"it'll give you a list of files and line numbers where they are defined so you
+"can quickly cycle through them.
+nmap <leader>a <Esc>:Ack!
+
+"Git plugins
+"Git.vim will provide us syntax highlighting for git configuration files;
+"fugitive provides a great interface for interacting with git including
+"getting diffs, status updates, committing, and moving files.
+"
+"Fugitive also allows you to view what branch you are working in directly from
+"vim. 
+"cmds:
+"---Gblame: This allows you to view a line by line comparison of who the last person
+" to touch that line of code is.
+"---Gwrite: This will stage your file for commit, basically doing git add <filename>
+"---Gread: This will basically run a git checkout <filename>
+"---Gcommit: This will just run git commit. Since its in a vim buffer, you can use 
+"keyword completion (Ctrl-N), like test_all<Ctrl-N> to find the method name in your 
+"buffer and complete it for the commit message. You can also use + and - on the 
+"filenames in the message to stage/unstage them for the commit.
+set statusline+=%{fugitive#statusline()}
+
+
+
+
 
 " detect file type
+filetype on
 filetype plugin indent on
 
 " If using a dark background within the editing area and syntax highlighting
