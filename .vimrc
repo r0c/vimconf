@@ -14,10 +14,7 @@ endif
 colorscheme ron        " elflord ron peachpuff default 设置配色方案，vim自带的配色方案保存在/usr/share/vim/vim72/colors目录下
 
 " load plugins managed by pathogen
-
-"call pathogen#runtime_append_all_bundles()
 execute pathogen#infect()
-" call pathogen#helptags()
 
 " config for bundle
 set foldmethod=indent
@@ -32,7 +29,7 @@ map <c-k> <c-w>k
 map <c-l> <c-w>l
 map <c-h> <c-w>h
 
-"Task lists,TODO
+"Task lists
 map <leader>td <Plug>TaskList
 
 "Revision History
@@ -41,7 +38,7 @@ map <leader>g :GundoToggle<CR>
 "Pep8
 let g:pep8_map='<leader>8'
 
-"SuperTab
+"SuperTab,TODO
 "hit <leader>pw when our cursor is on a module and have a new window open with
 "the whole documentation page for it.
 au FileType python set omnifunc=pythoncomplete#Complete
@@ -51,6 +48,7 @@ set completeopt=menuone,longest,preview
 "minibufexpl
 " Open files with :e <filename> to place in a buffer
 " You can also get a list of them doing :buffers.
+
 " ou can switch between the buffers using b<number>, such as :b1 for the first
 " buffer. You can also use its name to match, so you can type :b mod<tab> to
 " autocomplete opening the models.py buffer. 
@@ -60,7 +58,7 @@ set completeopt=menuone,longest,preview
 "any file in your project.It also supports searching only through opened
 "buffers, instead of files using <leader>b.
 
-"NerdTree
+"NerdTree,TODO:open window in current window
 map <leader>n :NERDTreeToggle<CR>
 
 "Ropevim
@@ -75,9 +73,9 @@ map <leader>r :RopeRename<CR>
 "search for anything in your code (variable name, class, method, etc) and
 "it'll give you a list of files and line numbers where they are defined so you
 "can quickly cycle through them.
-nmap <leader>a <Esc>:Ack!
+nmap <leader>a <Esc>:Ack-grep!
 
-"Git plugins
+"Git plugins,TODO: test ok?
 "Git.vim will provide us syntax highlighting for git configuration files;
 "fugitive provides a great interface for interacting with git including
 "getting diffs, status updates, committing, and moving files.
@@ -95,10 +93,52 @@ nmap <leader>a <Esc>:Ack!
 "filenames in the message to stage/unstage them for the commit.
 set statusline+=%{fugitive#statusline()}
 
+"django nose
+"Test runner integration really depends on the testing library you are using
+"and what type of tests you are running but we included a great generic plugin
+"called MakeGreen that executes off of vim's makeprg variable.
+"This will just give you a green bar at the bottom of vim if your test passed
+"or a red bar with the message of the failed test if it doesn't. Very simple.
 
+map <leader>dt :set makeprg=python\ manage.py\ test\|:call MakeGreen()<CR>
 
+"py test
+" This plugin has a lot more functionality including executing individual
+" tests by class, file, or method. You can also cycle through the individual
+" assertion errors. 
+" Execute the tests
+nmap <silent><Leader>tf <Esc>:Pytest file<CR>
+nmap <silent><Leader>tc <Esc>:Pytest class<CR>
+nmap <silent><Leader>tm <Esc>:Pytest method<CR>
+" cycle through test errors
+nmap <silent><Leader>tn <Esc>:Pytest next<CR>
+nmap <silent><Leader>tp <Esc>:Pytest previous<CR>
+nmap <silent><Leader>te <Esc>:Pytest error<CR>
 
+"Virtualenv
+"Vim doesn't realize that you are in a virtualenv so it wont give you code
+"completion for libraries only installed there. 
+"" Add the virtualenv's site-packages to vim path
+py << EOF
+import os.path
+import sys
+import vim
+if 'VIRTUAL_ENV' in os.environ:
+	project_base_dir = os.environ['VIRTUAL_ENV']
+	sys.path.insert(0, project_base_dir)
+	activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+	execfile(activate_this, dict(__file__=activate_this))
+EOF
 
+"Django
+"Export the DJANGO_SETTINGS_MODULE environment so that get code completion
+"for django modules as well:
+export DJANGO_SETTINGS_MODULE=project.settings
+
+"
+"
+"
+"
 " detect file type
 filetype on
 filetype plugin indent on
