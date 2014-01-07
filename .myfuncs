@@ -1,0 +1,22 @@
+#function sss ()
+#{
+#	_username='pengwa'
+#	ssh -l ${_username} $@
+#}
+
+#Auto complete the hostname
+complete -r ssh >&/dev/null
+_cssh ()
+{
+	cur=${COMP_WORDS[COMP_CWORD]};
+	COMPREPLY=($(compgen -W "$(cat ${HOME}/.ssh/known_hosts |awk -F ',' '{print $1}')" -- ${cur##pengwa@}))
+}
+complete -P "pengwa@" -F _cssh ssh
+
+export JAVA_HOME="/usr/lib/jvm/jdk1.7.0_45"
+export PATH="$PATH:$JAVA_HOME/bin"
+export _CODE="/home/enzo/Documents/code"
+export DJANGO_SETTINGS_MODULE=project.settings
+
+alia sllh='ls -lrsh'
+
