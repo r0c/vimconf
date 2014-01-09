@@ -4,7 +4,7 @@
 " Uncomment the next line to make Vim more Vi-compatible
 " NOTE: debian.vim sets 'nocompatible'. Setting 'compatible' changes numerous
 " options, so any other options should be set AFTER setting 'compatible'.
-set nocompatible
+"set nocompatible
 
 " Vim5 and later versions support syntax highlighting. Uncommenting the
 " following enables syntax highlighting by default.
@@ -15,15 +15,17 @@ colorscheme ron        " elflord ron peachpuff default 设置配色方案，vim�
 
 " load plugins managed by pathogen
 execute pathogen#infect()
+execute pathogen#helptags()
 
 " config for bundle
 set foldmethod=indent
 set foldlevel=99
 
-"TODO:
+"Some windows management shortcuts
 "Vertical Split : Ctrl+w + v
 "Horizontal Split: Ctrl+w + s
 "Close current windows: Ctrl+w + q
+"move cursor more faster
 map <c-j> <c-w>j
 map <c-k> <c-w>k
 map <c-l> <c-w>l
@@ -35,21 +37,20 @@ map <leader>td <Plug>TaskList
 "Revision History
 map <leader>g :GundoToggle<CR>
 
-"Pep8
+"Pep8, TODO:not useful? we have python-mode already
 let g:pep8_map='<leader>8'
 
-"SuperTab,TODO
-"hit <leader>pw when our cursor is on a module and have a new window open with
-"the whole documentation page for it.
-au FileType python set omnifunc=pythoncomplete#Complete
-let g:SuperTabDefaultCompletionType = "context"
-set completeopt=menuone,longest,preview
+""SuperTab
+""hit <leader>pw when our cursor is on a module and have a new window open with
+""the whole documentation page for it.
+"au FileType python set omnifunc=pythoncomplete#Complete
+"let g:SuperTabDefaultCompletionType = "context"
+"set completeopt=menuone,longest,preview
 
 "minibufexpl
 " Open files with :e <filename> to place in a buffer
 " You can also get a list of them doing :buffers.
-
-" ou can switch between the buffers using b<number>, such as :b1 for the first
+" you can switch between the buffers using b<number>, such as :b1 for the first
 " buffer. You can also use its name to match, so you can type :b mod<tab> to
 " autocomplete opening the models.py buffer. 
 
@@ -58,24 +59,25 @@ set completeopt=menuone,longest,preview
 "any file in your project.It also supports searching only through opened
 "buffers, instead of files using <leader>b.
 
-"NerdTree,TODO:open window in current window
+"NerdTree
 map <leader>n :NERDTreeToggle<CR>
-
-"Ropevim
-"Ropevim is also a great tool that will allow you to navigate around your
-"code. It supports automatically inserting import statements, goto definition,
-"refactoring, and code completion.
-map <leader>j :RopeGotoDefinition<CR>
-map <leader>r :RopeRename<CR>
+let NERDTreeChristmasTree=1
+let NERDTreeMouseMode=2
+let NERDTreeHighlightCursorline=0
+let NERDCompactSexyComs=1
+let NERDSpaceDelims=1
 
 "ACK
+"https://github.com/mileszs/ack.vim
 "Ack is similar to grep, but much better in my opinion. You can fuzzy text
 "search for anything in your code (variable name, class, method, etc) and
 "it'll give you a list of files and line numbers where they are defined so you
 "can quickly cycle through them.
-nmap <leader>a <Esc>:Ack-grep!
+nmap <leader>a <Esc>:Ack
 
-"Git plugins,TODO: test ok?
+"Git plugins
+"https://github.com/tpope/vim-fugitive
+"
 "Git.vim will provide us syntax highlighting for git configuration files;
 "fugitive provides a great interface for interacting with git including
 "getting diffs, status updates, committing, and moving files.
@@ -91,7 +93,51 @@ nmap <leader>a <Esc>:Ack-grep!
 "keyword completion (Ctrl-N), like test_all<Ctrl-N> to find the method name in your 
 "buffer and complete it for the commit message. You can also use + and - on the 
 "filenames in the message to stage/unstage them for the commit.
-set statusline+=%{fugitive#statusline()}
+"set statusline+=%{fugitive#statusline()}
+
+"powerline
+set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
+set term=xterm-256color
+
+"python-mode
+" Activate rope
+" Keys:
+" K             Show python docs
+"   Rope autocomplete
+" g     Rope goto definition
+" d     Rope show documentation
+" f     Rope find occurrences
+" b     Set, unset breakpoint (g:pymode_breakpoint enabled)
+" [[            Jump on previous class or function (normal, visual, operator modes)
+" ]]            Jump on next class or function (normal, visual, operator modes)
+" [M            Jump on previous class or method (normal, visual, operator modes)
+" ]M            Jump on next class or method (normal, visual, operator modes)
+let g:pymode_rope = 1
+" Documentation
+let g:pymode_doc = 1
+let g:pymode_doc_key = 'K'
+"Linting
+let g:pymode_lint = 1
+let g:pymode_lint_checkers = ["pep8","pyflakes"]
+" Auto check on save
+let g:pymode_lint_write = 1
+let g:pymode_virtualenv = 1
+" Enable breakpoints plugin
+let g:pymode_breakpoint = 1
+let g:pymode_breakpoint_key = 'b'
+" syntax highlighting
+let g:pymode_syntax = 1
+let g:pymode_syntax_all = 1
+let g:pymode_syntax_indent_errors = g:pymode_syntax_all
+let g:pymode_syntax_space_errors = g:pymode_syntax_all
+" Don't autofold code
+let g:pymode_folding = 0
+
+""jedi-vim
+""use as the autocompletion tool instead of the rope plugin that comes with
+""Python Mode
+"let g:pymode_rope = 0
+
 
 "django nose
 "Test runner integration really depends on the testing library you are using
@@ -99,7 +145,6 @@ set statusline+=%{fugitive#statusline()}
 "called MakeGreen that executes off of vim's makeprg variable.
 "This will just give you a green bar at the bottom of vim if your test passed
 "or a red bar with the message of the failed test if it doesn't. Very simple.
-
 map <leader>dt :set makeprg=python\ manage.py\ test\|:call MakeGreen()<CR>
 
 "py test
@@ -132,13 +177,13 @@ EOF
 
 "Django
 "Export the DJANGO_SETTINGS_MODULE environment so that get code completion
-"for django modules as well:
-export DJANGO_SETTINGS_MODULE=project.settings
+"for django modules as well, add this to .bashrc
+"export DJANGO_SETTINGS_MODULE=project.settings
 
 "
 "
 "
-"
+" Misc
 " detect file type
 filetype on
 filetype plugin indent on
@@ -155,28 +200,27 @@ if has("autocmd")
   filetype plugin indent on
 endif
 
-" The following are commented out as they cause vim to behave a lot
-" differently from regular Vi. They are highly recommended though.
-
 set ignorecase        " 搜索模式里忽略大小写
 set smartcase        " 如果搜索模式包含大写字符，不使用 'ignorecase' 选项。只有在输入搜索模式并且打开 'ignorecase' 选项时才会使用。
-set autowrite        " 自动把内容写回文件: 如果文件被修改过，在每个 :next、:rewind、:last、:first、:previous、:stop、:suspend、:tag、:!、:make、CTRL-] 和 CTRL-^命令时进行；用 :buffer、CTRL-O、CTRL-I、'{A-Z0-9} 或 `{A-Z0-9} 命令转到别的文件时亦然。
 set autoindent        " 设置自动对齐(缩进)：即每行的缩进值与上一行相等；使用 noautoindent 取消设置
 "set smartindent        " 智能对齐方式
+"set cindent            " 使用 C/C++ 语言的自动缩进方式
+set cinoptions={0,1s,t0,n-2,p2s,(03s,=.5s,>1s,=1s,:1s     "设置C/C++语言的具体缩进方式
 set tabstop=4        " 设置制表符(tab键)的宽度
 set softtabstop=4     " 设置软制表符的宽度    
 set shiftwidth=4    " (自动) 缩进使用的4个空格
-set cindent            " 使用 C/C++ 语言的自动缩进方式
-set cinoptions={0,1s,t0,n-2,p2s,(03s,=.5s,>1s,=1s,:1s     "设置C/C++语言的具体缩进方式
-"set backspace=2    " 设置退格键可用
-set showmatch        " 设置匹配模式，显示匹配的括号
 set linebreak        " 整词换行
 set whichwrap=b,s,<,>,[,] " 光标从行首和行末时可以跳到另一行去
+set expandtab
+set autowrite        " 自动把内容写回文件: 如果文件被修改过，在每个 :next、:rewind、:last、:first、:previous、:stop、:suspend、:tag、:!、:make、CTRL-] 和 CTRL-^命令时进行；用 :buffer、CTRL-O、CTRL-I、'{A-Z0-9} 或 `{A-Z0-9} 命令转到别的文件时亦然。
+"set backspace=2    " 设置退格键可用
+set showmatch        " 设置匹配模式，显示匹配的括号
+set listchars=tab:»\ ,eol:¬
 "set hidden " Hide buffers when they are abandoned
 "set mouse=a            " Enable mouse usage (all modes)    "使用鼠标
 set number            " Enable line number    "显示行号
 "set previewwindow    " 标识预览窗口
-set history=50        " set command history to 50    "历史记录50条
+set history=500        " set command history to 50    "历史记录50条
 
 
 "--状态行设置--
@@ -191,13 +235,19 @@ set showmode        " 命令行显示vim当前模式
 set hlsearch        
 set incsearch        " 输入字符串就显示匹配点
 
-"--ctags--
-map <F5> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR> :!cscope -Rbq<CR> :TlistUpdate<CR>
-imap <F5> <ESC>:!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR> :!cscope -Rbq<CR> :TlistUpdate<CR>
-set tags=tags
-set tags+=./tags "add current directory's generated tags file
-set tags+=/usr/src/kernels/2.6.32-358.18.1.el6.x86_64/tags "add kernel tags
-set tags+=/usr/include/tags "add kernel tags
+"Highlight python lines excess 120 chars
+augroup vimrc_autocmds
+	autocmd!
+	"highlight characters past column 120
+	autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
+	autocmd FileType python match Excess /\%120v.*/
+	autocmd FileType python set nowrap
+augroup END
+
+" more subtle popup colors
+if has ('gui_running')
+    highlight Pmenu guibg=#cccccc gui=bold
+endif
 
 ""-- omnicppcomplete setting --
 "" 按下F3自动补全代码，注意该映射语句后不能有其他字符，包括tab；否则按下F3会自动补全一些乱码
@@ -300,3 +350,12 @@ set tags+=/usr/include/tags "add kernel tags
 "map <F11>b :DoxBlock<CR>
 "map <F11>c O/** */<Left><Left>
 "map <F11>l :DoxLic<CR>
+"
+""--ctags--
+"map <F5> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR> :!cscope -Rbq<CR> :TlistUpdate<CR>
+"imap <F5> <ESC>:!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR> :!cscope -Rbq<CR> :TlistUpdate<CR>
+"set tags=tags
+"set tags+=./tags "add current directory's generated tags file
+"set tags+=/usr/src/kernels/2.6.32-358.18.1.el6.x86_64/tags "add kernel tags
+"set tags+=/usr/include/tags "add kernel tags
+
